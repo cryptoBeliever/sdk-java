@@ -28,6 +28,7 @@ import io.nem.symbol.sdk.model.account.Address;
 import io.nem.symbol.sdk.model.account.PublicAccount;
 import io.nem.symbol.sdk.model.namespace.AliasAction;
 import io.nem.symbol.sdk.model.namespace.NamespaceRegistrationType;
+import io.nem.symbol.sdk.model.network.NetworkType;
 import io.nem.symbol.sdk.model.transaction.AccountAddressRestrictionFlags;
 import io.nem.symbol.sdk.model.transaction.AccountAddressRestrictionTransaction;
 import io.nem.symbol.sdk.model.transaction.AccountKeyLinkTransaction;
@@ -45,6 +46,7 @@ import io.nem.symbol.sdk.model.transaction.MosaicAliasTransaction;
 import io.nem.symbol.sdk.model.transaction.MosaicDefinitionTransaction;
 import io.nem.symbol.sdk.model.transaction.MosaicMetadataTransaction;
 import io.nem.symbol.sdk.model.transaction.MosaicSupplyChangeTransaction;
+import io.nem.symbol.sdk.model.transaction.MosaicSupplyRevocationTransaction;
 import io.nem.symbol.sdk.model.transaction.MultisigAccountModificationTransaction;
 import io.nem.symbol.sdk.model.transaction.NamespaceMetadataTransaction;
 import io.nem.symbol.sdk.model.transaction.NamespaceRegistrationTransaction;
@@ -58,6 +60,7 @@ import io.nem.symbol.sdk.openapi.okhttp_gson.model.AggregateTransactionBodyExten
 import io.nem.symbol.sdk.openapi.okhttp_gson.model.HashLockTransactionDTO;
 import io.nem.symbol.sdk.openapi.okhttp_gson.model.MosaicDefinitionTransactionDTO;
 import io.nem.symbol.sdk.openapi.okhttp_gson.model.MosaicSupplyChangeTransactionDTO;
+import io.nem.symbol.sdk.openapi.okhttp_gson.model.MosaicSupplyRevocationTransactionDTO;
 import io.nem.symbol.sdk.openapi.okhttp_gson.model.MultisigAccountModificationTransactionDTO;
 import io.nem.symbol.sdk.openapi.okhttp_gson.model.NamespaceRegistrationTransactionDTO;
 import io.nem.symbol.sdk.openapi.okhttp_gson.model.SecretLockTransactionDTO;
@@ -196,6 +199,30 @@ public class TransactionMapperOkHttpTest {
     validateAggregateTransaction(
         (AggregateTransaction) aggregateMosaicSupplyChangeTransaction,
         aggregateMosaicSupplyChangeTransactionDTO);
+  }
+
+  @Test
+  void shouldCreateStandaloneMosaicSupplyRevocationTransaction() {
+    TransactionInfoDTO mosaicSupplyRevocationTransactionDTO =
+        TestHelperOkHttp.loadTransactionInfoDTO("standaloneMosaicSupplyRevocationTransaction.json");
+
+    Transaction mosaicSupplyRevocationTransaction = map(mosaicSupplyRevocationTransactionDTO);
+
+    validateStandaloneTransaction(
+        mosaicSupplyRevocationTransaction, mosaicSupplyRevocationTransactionDTO);
+  }
+
+  @Test
+  void shouldCreateAggregateMosaicSupplyRevocationTransaction() {
+    TransactionInfoDTO aggregateMosaicSupplyRevocationTransactionDTO =
+        TestHelperOkHttp.loadTransactionInfoDTO("aggregateMosaicSupplyRevocationTransaction.json");
+
+    Transaction aggregateMosaicSupplyRevocationTransaction =
+        map(aggregateMosaicSupplyRevocationTransactionDTO);
+
+    validateAggregateTransaction(
+        (AggregateTransaction) aggregateMosaicSupplyRevocationTransaction,
+        aggregateMosaicSupplyRevocationTransactionDTO);
   }
 
   @Test
@@ -391,6 +418,9 @@ public class TransactionMapperOkHttpTest {
       validateMosaicCreationTx((MosaicDefinitionTransaction) transaction, transactionDTO);
     } else if (transaction.getType() == TransactionType.MOSAIC_SUPPLY_CHANGE) {
       validateMosaicSupplyChangeTx((MosaicSupplyChangeTransaction) transaction, transactionDTO);
+    } else if (transaction.getType() == TransactionType.MOSAIC_SUPPLY_REVOCATION) {
+      validateMosaicSupplyRevocationTx(
+          (MosaicSupplyRevocationTransaction) transaction, transactionDTO);
     } else if (transaction.getType() == TransactionType.MULTISIG_ACCOUNT_MODIFICATION) {
       validateMultisigModificationTx(
           (MultisigAccountModificationTransaction) transaction, transactionDTO);
@@ -460,7 +490,7 @@ public class TransactionMapperOkHttpTest {
 
     Assertions.assertEquals(LinkAction.LINK, transaction.getLinkAction());
     Assertions.assertEquals(
-        "SARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJETM3ZQ",
+        "TARNASAS2BIAB6LMFA3FPMGBPGIJGK6IJE47FYQ",
         PublicAccount.createFromPublicKey(
                 transaction.getLinkedPublicKey().toHex(), transaction.getNetworkType())
             .getAddress()
@@ -481,7 +511,7 @@ public class TransactionMapperOkHttpTest {
         (MosaicMetadataTransaction) aggregateTransferTransaction.getInnerTransactions().get(0);
 
     Assertions.assertEquals(
-        "9103B60AAF27626883000000000000000000000000000000",
+        "9903B60AAF27626883000000000000000000000000000000",
         transaction.getTargetAddress().encoded(transaction.getNetworkType()));
 
     Assertions.assertEquals(1, transaction.getValueSizeDelta());
@@ -654,12 +684,14 @@ public class TransactionMapperOkHttpTest {
         aggregateTransaction.getMaxFee());
     assertNotNull(aggregateTransaction.getDeadline());
 
-    assertEquals(
-        aggregateTransactionBodyDTO.getCosignatures().get(0).getSignature(),
-        aggregateTransaction.getCosignatures().get(0).getSignature());
-    assertEquals(
-        aggregateTransactionBodyDTO.getCosignatures().get(0).getSignerPublicKey(),
-        aggregateTransaction.getCosignatures().get(0).getSigner().getPublicKey().toHex());
+    if (aggregateTransactionBodyDTO.getCosignatures().size() > 0) {
+      assertEquals(
+          aggregateTransactionBodyDTO.getCosignatures().get(0).getSignature(),
+          aggregateTransaction.getCosignatures().get(0).getSignature());
+      assertEquals(
+          aggregateTransactionBodyDTO.getCosignatures().get(0).getSignerPublicKey(),
+          aggregateTransaction.getCosignatures().get(0).getSigner().getPublicKey().toHex());
+    }
 
     Transaction innerTransaction = aggregateTransaction.getInnerTransactions().get(0);
     validateStandaloneTransaction(
@@ -752,6 +784,21 @@ public class TransactionMapperOkHttpTest {
     assertEquals(
         transaction.getAction().getValue(),
         mosaicSupplyChangeTransaction.getAction().getValue().intValue());
+  }
+
+  void validateMosaicSupplyRevocationTx(
+      MosaicSupplyRevocationTransaction transaction, TransactionInfoDTO transactionDTO) {
+    MosaicSupplyRevocationTransactionDTO mosaicSupplyRevocationTransaction =
+        jsonHelper.convert(
+            transactionDTO.getTransaction(), MosaicSupplyRevocationTransactionDTO.class);
+    assertEquals(
+        MapperUtils.fromHexToBigInteger(mosaicSupplyRevocationTransaction.getMosaicId()),
+        transaction.getMosaic().getId().getId());
+    assertEquals(
+        mosaicSupplyRevocationTransaction.getAmount(), transaction.getMosaic().getAmount());
+    assertEquals(
+        mosaicSupplyRevocationTransaction.getSourceAddress(),
+        transaction.getSourceAddress().encoded(NetworkType.TEST_NET));
   }
 
   void validateMultisigModificationTx(

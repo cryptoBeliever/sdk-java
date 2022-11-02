@@ -33,7 +33,7 @@ class MosaicInfoTest {
 
   @Test
   void createAMosaicInfoViaConstructor() {
-    MosaicFlags mosaicFlags = MosaicFlags.create(true, true, true);
+    MosaicFlags mosaicFlags = MosaicFlags.create(true, true, true, true);
     MosaicId mosaicId = new MosaicId(new BigInteger("-3087871471161192663"));
 
     Address address = Address.createFromRawAddress("SDY3NFHBQAPO7ZBII3USHG2UZHJYD7G7FICKIII");
@@ -56,7 +56,8 @@ class MosaicInfoTest {
     assertEquals(address, info.getOwnerAddress());
     assertTrue(info.isSupplyMutable());
     assertTrue(info.isTransferable());
-    assertTrue(info.isTransferable());
+    assertTrue(info.isRestrictable());
+    assertTrue(info.isRevokable());
     assertEquals(1L, info.getRevision());
     assertEquals(3, info.getDivisibility());
     assertEquals(BigInteger.valueOf(10), info.getDuration());
@@ -74,7 +75,7 @@ class MosaicInfoTest {
 
   @Test
   void toNetworkCurrency() {
-    MosaicFlags mosaicFlags = MosaicFlags.create(true, true, true);
+    MosaicFlags mosaicFlags = MosaicFlags.create(true, true, true, true);
     MosaicId mosaicId = new MosaicId(new BigInteger("-3087871471161192663"));
 
     Address address = Account.generateNewAccount(NetworkType.MIJIN_TEST).getAddress();
@@ -96,115 +97,61 @@ class MosaicInfoTest {
     assertFalse(currency.getNamespaceId().isPresent());
     assertTrue(currency.isSupplyMutable());
     assertTrue(currency.isTransferable());
+    assertTrue(currency.isRestrictable());
+    assertTrue(currency.isRevokable());
     assertEquals(3, currency.getDivisibility());
   }
 
   @Test
   void shouldReturnIsSupplyMutableWhenIsMutable() {
-    MosaicFlags mosaicFlags = MosaicFlags.create(true, true, true);
-
-    MosaicInfo mosaicInfo =
-        new MosaicInfo(
-            "abc",
-            1,
-            new MosaicId(new BigInteger("-3087871471161192663")),
-            new BigInteger("100"),
-            new BigInteger("0"),
-            Account.generateNewAccount(NetworkType.MIJIN_TEST).getAddress(),
-            1L,
-            mosaicFlags,
-            3,
-            BigInteger.valueOf(10));
-
+    MosaicInfo mosaicInfo = buildMosaicInfo(MosaicFlags.create(true, false, false, false));
     assertTrue(mosaicInfo.isSupplyMutable());
   }
 
   @Test
   void shouldReturnIsSupplyMutableWhenIsImmutable() {
-    MosaicFlags mosaicFlags = MosaicFlags.create(false, true, true);
-
-    MosaicInfo mosaicInfo =
-        new MosaicInfo(
-            "abc",
-            1,
-            new MosaicId(new BigInteger("-3087871471161192663")),
-            new BigInteger("100"),
-            new BigInteger("0"),
-            Account.generateNewAccount(NetworkType.MIJIN_TEST).getAddress(),
-            1L,
-            mosaicFlags,
-            3,
-            BigInteger.valueOf(10));
-
+    MosaicInfo mosaicInfo = buildMosaicInfo(MosaicFlags.create(false, true, true, true));
     assertFalse(mosaicInfo.isSupplyMutable());
   }
 
   @Test
   void shouldReturnIsTransferableWhenItsTransferable() {
-    MosaicFlags mosaicFlags = MosaicFlags.create(true, true, true);
-
-    MosaicInfo mosaicInfo =
-        new MosaicInfo(
-            "abc",
-            1,
-            new MosaicId(new BigInteger("-3087871471161192663")),
-            new BigInteger("100"),
-            new BigInteger("0"),
-            Account.generateNewAccount(NetworkType.MIJIN_TEST).getAddress(),
-            1L,
-            mosaicFlags,
-            3,
-            BigInteger.valueOf(10));
-
+    MosaicInfo mosaicInfo = buildMosaicInfo(MosaicFlags.create(false, true, false, false));
     assertTrue(mosaicInfo.isTransferable());
   }
 
   @Test
   void shouldReturnIsTransferableWhenItsNotTransferable() {
-    MosaicFlags mosaicFlags = MosaicFlags.create(true, false, true);
-
-    MosaicInfo mosaicInfo =
-        new MosaicInfo(
-            "abc",
-            1,
-            new MosaicId(new BigInteger("-3087871471161192663")),
-            new BigInteger("100"),
-            new BigInteger("0"),
-            Account.generateNewAccount(NetworkType.MIJIN_TEST).getAddress(),
-            1L,
-            mosaicFlags,
-            3,
-            BigInteger.valueOf(10));
-
+    MosaicInfo mosaicInfo = buildMosaicInfo(MosaicFlags.create(true, false, true, true));
     assertFalse(mosaicInfo.isTransferable());
   }
 
   @Test
   void shouldReturnIsRestrictableWhenItsRestrictable() {
-    MosaicFlags mosaicFlags = MosaicFlags.create(true, true, true);
-
-    MosaicInfo mosaicInfo =
-        new MosaicInfo(
-            "abc",
-            1,
-            new MosaicId(new BigInteger("-3087871471161192663")),
-            new BigInteger("100"),
-            new BigInteger("0"),
-            Account.generateNewAccount(NetworkType.MIJIN_TEST).getAddress(),
-            1L,
-            mosaicFlags,
-            3,
-            BigInteger.valueOf(10));
-
+    MosaicInfo mosaicInfo = buildMosaicInfo(MosaicFlags.create(false, false, true, false));
     assertTrue(mosaicInfo.isRestrictable());
   }
 
   @Test
   void shouldReturnIsRestrictableWhenItsNotRestrictable() {
-    MosaicFlags mosaicFlags = MosaicFlags.create(true, true, false);
+    MosaicInfo mosaicInfo = buildMosaicInfo(MosaicFlags.create(true, true, false, true));
+    assertFalse(mosaicInfo.isRestrictable());
+  }
 
-    MosaicInfo mosaicInfo =
-        new MosaicInfo(
+  @Test
+  void shouldReturnIsRevokableWhenItsRevokable() {
+    MosaicInfo mosaicInfo = buildMosaicInfo(MosaicFlags.create(false, false, false, true));
+    assertTrue(mosaicInfo.isRevokable());
+  }
+
+  @Test
+  void shouldReturnIsRevokaleWhenItsNotRevokable() {
+    MosaicInfo mosaicInfo = buildMosaicInfo(MosaicFlags.create(true, true, true, false));
+    assertFalse(mosaicInfo.isRevokable());
+  }
+
+  private MosaicInfo buildMosaicInfo(MosaicFlags mosaicFlags) {
+    return new MosaicInfo(
             "abc",
             1,
             new MosaicId(new BigInteger("-3087871471161192663")),
@@ -215,7 +162,5 @@ class MosaicInfoTest {
             mosaicFlags,
             3,
             BigInteger.valueOf(10));
-
-    assertFalse(mosaicInfo.isRestrictable());
   }
 }
