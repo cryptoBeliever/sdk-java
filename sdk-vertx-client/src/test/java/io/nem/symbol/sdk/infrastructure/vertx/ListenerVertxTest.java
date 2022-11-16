@@ -71,7 +71,7 @@ import org.mockito.Mockito;
 /** Tests for the {@link ListenerVertx} implementation of the {@link Listener} */
 public class ListenerVertxTest {
 
-  public static final NetworkType NETWORK_TYPE = NetworkType.MIJIN_TEST;
+  public static final NetworkType NETWORK_TYPE = NetworkType.TEST_NET;
   private final String wsId = "TheWSid";
   private ListenerVertx listener;
   private HttpClient httpClientMock;

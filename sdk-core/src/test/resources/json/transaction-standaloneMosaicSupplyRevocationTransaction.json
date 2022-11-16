@@ -3,9 +3,7 @@
     "height": "901965",
     "hash": "C0D4301AC8B50A93EC9229464EFC6550EE1B424837EC78D53CD019212DFC878E",
     "merkleComponentHash": "C0D4301AC8B50A93EC9229464EFC6550EE1B424837EC78D53CD019212DFC878E",
-    "index": 0,
-    "timestamp": "27166855374",
-    "feeMultiplier": 250
+    "index": 0
   },
   "transaction": {
     "size": 168,

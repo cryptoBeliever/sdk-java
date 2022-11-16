@@ -19,8 +19,9 @@ import io.nem.symbol.sdk.model.account.UnresolvedAddress;
 import io.nem.symbol.sdk.model.mosaic.Mosaic;
 
 /**
- * Creators of a revokable mosaic will be able to recall any and all balances from any holders. Holders of these mosaics implicitly place trust in the issuer.
- * The mosaic issuer can revoke and recall balances using this transaction.
+ * Creators of a revokable mosaic will be able to recall any and all balances from any holders.
+ * Holders of these mosaics implicitly place trust in the issuer. The mosaic issuer can revoke and
+ * recall balances using this transaction.
  */
 public class MosaicSupplyRevocationTransaction extends Transaction {
 

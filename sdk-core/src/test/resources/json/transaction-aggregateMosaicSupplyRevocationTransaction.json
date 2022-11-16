@@ -3,9 +3,7 @@
     "height": "689761",
     "hash": "293918248EFF761AC396085B14722683BE32BBBA8C574372993DE0FA7EAA44B2",
     "merkleComponentHash": "293918248EFF761AC396085B14722683BE32BBBA8C574372993DE0FA7EAA44B2",
-    "index": 3,
-    "timestamp": "20794803737",
-    "feeMultiplier": 0
+    "index": 3
   },
   "transaction": {
     "size": 256,
@@ -24,9 +22,7 @@
           "height": "689761",
           "aggregateHash": "293918248EFF761AC396085B14722683BE32BBBA8C574372993DE0FA7EAA44B2",
           "aggregateId": "618D4433B139743B9255C834",
-          "index": 0,
-          "timestamp": "20794803737",
-          "feeMultiplier": 0
+          "index": 0
         },
         "transaction": {
           "signerPublicKey": "BE0B4CF546B7B4F4BBFCFF9F574FDA527C07A53D3FC76F8BB7DB746F8E8E0A9F",

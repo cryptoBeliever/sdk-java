@@ -673,18 +673,17 @@ class TransactionServiceTest {
   }
 
   @Test
-  void mosaicSupplyRevocationTransactionResolveAlias() throws ExecutionException, InterruptedException {
+  void mosaicSupplyRevocationTransactionResolveAlias()
+      throws ExecutionException, InterruptedException {
 
     String transactionHash = "aaaa";
     Mosaic mosaic = new Mosaic(mosaicNamespace2, BigInteger.valueOf(2));
+    UnresolvedAddress recipient = addressNamespace1;
 
     TransactionFactory<MosaicSupplyRevocationTransaction> factory =
-            MosaicSupplyRevocationTransactionFactory.create(
-                            NetworkType.MIJIN_TEST,
-                            new Deadline(BigInteger.ONE),
-                            Account.generateNewAccount(networkType).getAddress(),
-                            mosaic)
-                    .transactionInfo(TransactionInfo.create(height, 4, "ABC", transactionHash, ""));
+        MosaicSupplyRevocationTransactionFactory.create(
+                NetworkType.MIJIN_TEST, new Deadline(BigInteger.ONE), recipient, mosaic)
+            .transactionInfo(TransactionInfo.create(height, 4, "ABC", transactionHash, ""));
 
     MosaicSupplyRevocationTransaction transaction = factory.build();
 
@@ -693,14 +692,16 @@ class TransactionServiceTest {
     List<String> hashes = Collections.singletonList(transactionHash);
 
     Mockito.when(
-                    transactionRepositoryMock.getTransactions(
-                            Mockito.eq(TransactionGroup.CONFIRMED), Mockito.eq(hashes)))
-            .thenReturn(Observable.just(Collections.singletonList(transaction)));
+            transactionRepositoryMock.getTransactions(
+                Mockito.eq(TransactionGroup.CONFIRMED), Mockito.eq(hashes)))
+        .thenReturn(Observable.just(Collections.singletonList(transaction)));
 
     MosaicSupplyRevocationTransaction resolvedTransaction =
-            (MosaicSupplyRevocationTransaction) service.resolveAliases(hashes).toFuture().get().get(0);
+        (MosaicSupplyRevocationTransaction) service.resolveAliases(hashes).toFuture().get().get(0);
 
     Assertions.assertEquals(mosaicId2, resolvedTransaction.getMosaic().getId());
+
+    Assertions.assertEquals(address1, resolvedTransaction.getSourceAddress());
   }
 
   @Test

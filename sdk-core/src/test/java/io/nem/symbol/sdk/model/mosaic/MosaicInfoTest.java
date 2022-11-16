@@ -65,7 +65,7 @@ class MosaicInfoTest {
 
     byte[] serializedState = info.serialize();
     String expectedHex =
-        "010029CF5FD941AD25D56400000000000000C80000000000000090F1B694E1801EEFE42846E9239B54C9D381FCDF2A04A4210100000007030A00000000000000";
+        "010029CF5FD941AD25D56400000000000000C80000000000000090F1B694E1801EEFE42846E9239B54C9D381FCDF2A04A421010000000F030A00000000000000";
     Assertions.assertEquals(expectedHex, ConvertUtils.toHex(serializedState));
     MosaicEntryBuilder builder =
         MosaicEntryBuilder.loadFromBinary(SerializationUtils.toDataInput(serializedState));
@@ -152,15 +152,15 @@ class MosaicInfoTest {
 
   private MosaicInfo buildMosaicInfo(MosaicFlags mosaicFlags) {
     return new MosaicInfo(
-            "abc",
-            1,
-            new MosaicId(new BigInteger("-3087871471161192663")),
-            new BigInteger("100"),
-            new BigInteger("0"),
-            Account.generateNewAccount(NetworkType.MIJIN_TEST).getAddress(),
-            1L,
-            mosaicFlags,
-            3,
-            BigInteger.valueOf(10));
+        "abc",
+        1,
+        new MosaicId(new BigInteger("-3087871471161192663")),
+        new BigInteger("100"),
+        new BigInteger("0"),
+        Account.generateNewAccount(NetworkType.MIJIN_TEST).getAddress(),
+        1L,
+        mosaicFlags,
+        3,
+        BigInteger.valueOf(10));
   }
 }
