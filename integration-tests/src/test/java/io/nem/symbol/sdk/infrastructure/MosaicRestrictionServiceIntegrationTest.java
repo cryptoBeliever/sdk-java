@@ -45,7 +45,7 @@ public class MosaicRestrictionServiceIntegrationTest extends BaseIntegrationTest
 
   @BeforeAll
   void setup() {
-    testAccount = config().getDefaultAccount();
+    testAccount = helper().getTestAccount(TestHelper.DEFAULT_REPOSITORY_TYPE).getLeft();
   }
 
   @ParameterizedTest
