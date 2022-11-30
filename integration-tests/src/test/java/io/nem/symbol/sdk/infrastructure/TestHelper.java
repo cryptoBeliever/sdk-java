@@ -95,8 +95,8 @@ import org.junit.jupiter.api.Assertions;
 
 public class TestHelper {
 
-  public static final long AMOUNT_PER_TRANSFER = 100000000;
-  public static final long MIN_AMOUNT_PER_TRANSFER = 1000000;
+  public static final long AMOUNT_PER_TRANSFER = 2000 * 1000000;
+  public static final long MIN_AMOUNT_PER_TRANSFER = 1000 * 1000000;
   protected static final RepositoryType DEFAULT_REPOSITORY_TYPE = RepositoryType.VERTX;
   private final Map<RepositoryType, RepositoryFactory> repositoryFactoryMap = new HashMap<>();
   private final Map<RepositoryType, Listener> listenerMap = new HashMap<>();
@@ -180,7 +180,7 @@ public class TestHelper {
             aggregateTransaction, Arrays.asList(cosigners), getGenerationHash());
     if (transaction.getType() != TransactionType.AGGREGATE_COMPLETE) {
       System.out.println(
-          "Announcing Transaction Transaction: "
+          "Announcing Transaction: "
               + transaction.getType()
               + " Address: "
               + signer.getAddress().plain()
@@ -207,7 +207,7 @@ public class TestHelper {
 
     SignedTransaction signedTransaction = testAccount.sign(transaction, getGenerationHash());
     System.out.println(
-        "Announcing Transaction Transaction: "
+        "Announcing Transaction: "
             + transaction.getType()
             + " Address: "
             + testAccount.getAddress().plain()
@@ -703,7 +703,7 @@ public class TestHelper {
     Assertions.assertTrue(
         page.getData().stream().anyMatch(m -> m.getHash().equals(hashLockTransaction.getHash())));
     Assertions.assertEquals(20, page.getPageSize());
-    sleep(1000);
+    sleep(20000);
     return get(multisigRepository.getMultisigAccountInfo(multisigAccount.getAddress()));
   }
 
@@ -834,8 +834,8 @@ public class TestHelper {
 
   public Pair<Account, NamespaceId> getTestAccount(RepositoryType type) {
     Account testAccount = config().getTestAccount();
-    NamespaceId namespaceId = setAddressAlias(type, testAccount.getAddress(), "testaccount");
     sendMosaicFromNemesis(type, testAccount.getAddress(), false);
+    NamespaceId namespaceId = setAddressAlias(type, testAccount.getAddress(), "testaccount");
     return Pair.of(testAccount, namespaceId);
   }
 
