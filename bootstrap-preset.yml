@@ -1,4 +1,3 @@
-symbolRestImage: symbolplatform/symbol-rest:2.3.3-alpha
 throttlingBurst: 35
 throttlingRate: 1000
 blockGenerationTargetTime: 5s
