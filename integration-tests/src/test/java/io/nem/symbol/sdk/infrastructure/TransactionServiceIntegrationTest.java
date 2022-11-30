@@ -44,8 +44,9 @@ public class TransactionServiceIntegrationTest extends BaseIntegrationTest {
   public void testTransferCatCurrencyFromNemesis(RepositoryType type) {
     String mosaicAlias = getNetworkCurrency().getNamespaceId().get().getFullName().get();
 
-    Account testAccount = helper().getTestAccount(type).getLeft();
-    String recipientAlias = "testaccount" + RandomUtils.nextInt(0, 10000);
+    Pair<Account, NamespaceId> testAccountPair = helper().getTestAccount(type);
+    Account testAccount = testAccountPair.getLeft();
+    String recipientAlias = testAccountPair.getRight().getFullName().get();
     helper().setAddressAlias(type, testAccount.getAddress(), recipientAlias);
 
     String hash =
@@ -78,8 +79,9 @@ public class TransactionServiceIntegrationTest extends BaseIntegrationTest {
 
     String mosaicAlias =
         ("testTransferCustomCurrencyFromAccount1" + RandomUtils.nextInt(0, 10000)).toLowerCase();
-    String recipientAlias = "testaccount" + RandomUtils.nextInt(0, 10000);
-    Account testAccount = helper.getTestAccount(type).getLeft();
+    Pair<Account, NamespaceId> testAccountPair = helper().getTestAccount(type);
+    Account testAccount = testAccountPair.getLeft();
+    String recipientAlias = testAccountPair.getRight().getFullName().get();
     MosaicId mosaicId =
         helper().createMosaic(testAccount, type, BigInteger.valueOf(10000), mosaicAlias);
     helper().setAddressAlias(type, testAccount.getAddress(), recipientAlias);
@@ -105,8 +107,9 @@ public class TransactionServiceIntegrationTest extends BaseIntegrationTest {
     String mosaicAlias =
         ("testTransferCustomCurrencyFromAccount1UsingAggregate" + RandomUtils.nextInt(0, 10000))
             .toLowerCase();
-    Account testAccount = helper().getTestAccount(type).getLeft();
-    String recipientAlias = "testaccount" + RandomUtils.nextInt(0, 10000);
+    Pair<Account, NamespaceId> accountAndAlias = helper().getTestAccount(type);
+    Account testAccount = accountAndAlias.getLeft();
+    String recipientAlias = accountAndAlias.getRight().getFullName().get();
 
     MosaicId mosaicId =
         helper().createMosaic(testAccount, type, BigInteger.valueOf(10000), mosaicAlias);
