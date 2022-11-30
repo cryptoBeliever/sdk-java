@@ -616,7 +616,7 @@ public class TestHelper {
     sendMosaicFromNemesis(type, multisigAccount.getAddress(), false);
     NamespaceId namespaceId =
         setAddressAlias(type, multisigAccount.getAddress(), "multisigaccount");
-    this.createMultisigAccountBonded(
+    createMultisigAccountComplete(
         type, multisigAccount, config().getCosignatoryAccount(), config().getCosignatory2Account());
     return Pair.of(multisigAccount, namespaceId);
   }
@@ -703,7 +703,7 @@ public class TestHelper {
     Assertions.assertTrue(
         page.getData().stream().anyMatch(m -> m.getHash().equals(hashLockTransaction.getHash())));
     Assertions.assertEquals(20, page.getPageSize());
-    sleep(20000);
+    sleep(1000);
     return get(multisigRepository.getMultisigAccountInfo(multisigAccount.getAddress()));
   }
 
