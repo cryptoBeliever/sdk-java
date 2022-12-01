@@ -455,7 +455,7 @@ public class TestHelper {
       }
     }
 
-    return rootNamespaceId;
+    return namespaceId;
   }
 
   protected boolean isAlias(RepositoryType type, MosaicId mosaicId, NamespaceId namespaceId) {

@@ -69,7 +69,7 @@ class NamespaceMetadataServiceIntegrationTest extends BaseIntegrationTest {
 
     announceAggregateAndValidate(type, originalTransaction, signerAccount);
 
-    sleep(1000);
+    waitForIndexing();
 
     assertMetadata(targetNamespaceId, key, originalMessage, metadataRepository, signerAccount);
 
@@ -85,7 +85,7 @@ class NamespaceMetadataServiceIntegrationTest extends BaseIntegrationTest {
 
     announceAggregateAndValidate(type, updateTransaction, signerAccount);
 
-    sleep(1000);
+    waitForIndexing();
 
     assertMetadata(targetNamespaceId, key, newMessage, metadataRepository, signerAccount);
   }

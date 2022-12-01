@@ -76,7 +76,7 @@ public class MosaicAliasTransactionIntegrationTest extends BaseIntegrationTest {
 
     announceAggregateAndValidate(type, addressAliasTransaction, account);
 
-    sleep(1000);
+    waitForIndexing();
 
     List<MosaicNames> accountNames =
         get(

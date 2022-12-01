@@ -218,7 +218,7 @@ class AccountRestrictionIntegrationTest extends BaseIntegrationTest {
       Object value) {
     try {
 
-      sleep(1000);
+      waitForIndexing();
 
       AccountRestrictions restrictions =
           get(

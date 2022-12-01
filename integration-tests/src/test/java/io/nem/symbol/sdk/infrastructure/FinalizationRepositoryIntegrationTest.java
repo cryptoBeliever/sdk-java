@@ -61,10 +61,9 @@ public class FinalizationRepositoryIntegrationTest extends BaseIntegrationTest {
         get(repositoryFactory.createChainRepository().getChainInfo()).getLatestFinalizedBlock();
 
     FinalizationRepository repository = repositoryFactory.createFinalizationRepository();
+    long previousEpoch = max(finalizedBlock.getFinalizationEpoch() - 1, 1);
     FinalizationProof latestFinalizationProof =
-        get(
-            repository.getFinalizationProofAtEpoch(
-                max(finalizedBlock.getFinalizationEpoch() - 1, 1)));
+        get(repository.getFinalizationProofAtEpoch(previousEpoch));
     FinalizationProof finalizationProof =
         get(repository.getFinalizationProofAtHeight(latestFinalizationProof.getHeight()));
 

@@ -76,7 +76,7 @@ class MosaicMetadataServiceIntegrationTest extends BaseIntegrationTest {
 
     helper().announceAggregateAndValidate(type, originalTransaction, signerAccount);
 
-    sleep(1000);
+    waitForIndexing();
 
     assertMetadata(
         targetMosaicId, key, originalMessage, metadataRepository, signerAccount, targetAccount);
@@ -102,7 +102,7 @@ class MosaicMetadataServiceIntegrationTest extends BaseIntegrationTest {
 
     helper().announceAggregateAndValidate(type, updateTransaction, signerAccount);
 
-    sleep(1000);
+    waitForIndexing();
 
     assertMetadata(
         targetMosaicId, key, newMessage, metadataRepository, signerAccount, targetAccount);
