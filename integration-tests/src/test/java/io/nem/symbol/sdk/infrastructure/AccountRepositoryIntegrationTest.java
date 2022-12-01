@@ -33,7 +33,6 @@ import io.nem.symbol.sdk.model.transaction.TransactionGroup;
 import io.nem.symbol.sdk.model.transaction.TransactionType;
 import io.nem.symbol.sdk.model.transaction.TransferTransaction;
 import io.reactivex.Observable;
-
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
@@ -52,7 +51,12 @@ class AccountRepositoryIntegrationTest extends BaseIntegrationTest {
   @BeforeAll
   void setup() {
     testAccount = helper().getTestAccount(TestHelper.DEFAULT_REPOSITORY_TYPE).getLeft();
-    helper().basicTransfer(TestHelper.DEFAULT_REPOSITORY_TYPE, testAccount, testAccount.getAddress(), BigInteger.TEN);
+    helper()
+        .basicTransfer(
+            TestHelper.DEFAULT_REPOSITORY_TYPE,
+            testAccount,
+            testAccount.getAddress(),
+            BigInteger.TEN);
   }
 
   @ParameterizedTest
@@ -151,7 +155,9 @@ class AccountRepositoryIntegrationTest extends BaseIntegrationTest {
 
     String id = transactions.get(1).getTransactionInfo().get().getId().get();
     List<Transaction> transactions2 =
-        get(transactionRepository.getTransactions(TransactionGroup.CONFIRMED, Collections.singletonList(id)));
+        get(
+            transactionRepository.getTransactions(
+                TransactionGroup.CONFIRMED, Collections.singletonList(id)));
 
     Assertions.assertEquals(1, transactions2.size());
     transactions2.forEach(

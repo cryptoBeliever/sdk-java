@@ -164,6 +164,7 @@ public class MosaicMetadataIntegrationTest extends BaseIntegrationTest {
     return endpointMetadata.get().getCompositeHash();
   }
 
+  //
   @ParameterizedTest
   @EnumSource(RepositoryType.class)
   void searchIntegration(RepositoryType type) {

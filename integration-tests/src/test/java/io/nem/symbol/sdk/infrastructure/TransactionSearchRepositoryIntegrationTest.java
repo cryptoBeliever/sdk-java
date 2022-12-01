@@ -274,7 +274,8 @@ public class TransactionSearchRepositoryIntegrationTest extends BaseIntegrationT
     TransactionPaginationStreamer streamer =
         new TransactionPaginationStreamer(transactionRepository);
     TransactionGroup group = TransactionGroup.CONFIRMED;
-    TransactionSearchCriteria criteria = new TransactionSearchCriteria(group)
+    TransactionSearchCriteria criteria =
+        new TransactionSearchCriteria(group)
             .transactionTypes(Collections.singletonList(TransactionType.TRANSFER))
             .embedded(true);
     List<Transaction> transactions = get(streamer.search(criteria).toList().toObservable());

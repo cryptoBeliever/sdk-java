@@ -91,7 +91,6 @@ class CurrencyServiceIntegrationTest extends BaseIntegrationTest {
             });
 
     Assertions.assertEquals(
-        "There is no currency with id 000000000000000A",
-        exception.getMessage());
+        "There is no currency with id 000000000000000A", exception.getMessage());
   }
 }

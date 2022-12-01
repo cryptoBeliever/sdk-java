@@ -15,6 +15,8 @@
  */
 package io.nem.symbol.sdk.infrastructure;
 
+import static java.lang.Math.max;
+
 import io.nem.symbol.sdk.api.FinalizationRepository;
 import io.nem.symbol.sdk.api.RepositoryFactory;
 import io.nem.symbol.sdk.model.blockchain.FinalizedBlock;
@@ -24,8 +26,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-
-import static java.lang.Math.max;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class FinalizationRepositoryIntegrationTest extends BaseIntegrationTest {
@@ -62,7 +62,9 @@ public class FinalizationRepositoryIntegrationTest extends BaseIntegrationTest {
 
     FinalizationRepository repository = repositoryFactory.createFinalizationRepository();
     FinalizationProof latestFinalizationProof =
-        get(repository.getFinalizationProofAtEpoch(max(finalizedBlock.getFinalizationEpoch() - 1, 1)));
+        get(
+            repository.getFinalizationProofAtEpoch(
+                max(finalizedBlock.getFinalizationEpoch() - 1, 1)));
     FinalizationProof finalizationProof =
         get(repository.getFinalizationProofAtHeight(latestFinalizationProof.getHeight()));
 
