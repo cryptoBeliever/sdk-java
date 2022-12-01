@@ -55,7 +55,7 @@ public class FinalizationRepositoryIntegrationTest extends BaseIntegrationTest {
 
   @ParameterizedTest
   @EnumSource(RepositoryType.class)
-  void getFinalizationProofAtCurrentFinalizedHeight(RepositoryType type) {
+  void getFinalizationProofAtPreviousFinalizedEpochHeight(RepositoryType type) {
     RepositoryFactory repositoryFactory = getRepositoryFactory(type);
     FinalizedBlock finalizedBlock =
         get(repositoryFactory.createChainRepository().getChainInfo()).getLatestFinalizedBlock();
