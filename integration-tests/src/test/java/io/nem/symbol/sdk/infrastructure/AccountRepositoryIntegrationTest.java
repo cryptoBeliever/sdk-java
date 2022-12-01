@@ -240,7 +240,6 @@ class AccountRepositoryIntegrationTest extends BaseIntegrationTest {
   @ParameterizedTest
   @EnumSource(RepositoryType.class)
   void unconfirmedTransactions(RepositoryType type) {
-    Account testAccount = this.config().getDefaultAccount();
     TransactionRepository transactionRepository =
         getRepositoryFactory(type).createTransactionRepository();
     PublicAccount publicAccount = this.helper().getTestAccount(type).getLeft().getPublicAccount();
@@ -250,7 +249,7 @@ class AccountRepositoryIntegrationTest extends BaseIntegrationTest {
                     .signerPublicKey(publicAccount.getPublicKey())))
             .getData();
     System.out.println(transactions.size());
-    transactions.forEach(transaction -> assertTransaction(transaction, testAccount.getAddress()));
+    transactions.forEach(transaction -> assertTransaction(transaction, publicAccount.getAddress()));
   }
 
   @ParameterizedTest
